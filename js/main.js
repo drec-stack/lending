@@ -408,14 +408,12 @@ const StickyFooter = (() => {
         const currentScrollY = window.pageYOffset;
         const scrollThreshold = 200;
         
-        // Показываем блок после прокрутки на 200px
         if (currentScrollY > scrollThreshold) {
             stickyCard.classList.remove('hide');
         } else {
             stickyCard.classList.add('hide');
         }
         
-        // Скрываем при скролле вниз, показываем при скролле вверх
         if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold + 100) {
             stickyCard.classList.add('hide');
         } else if (currentScrollY < lastScrollY && currentScrollY > scrollThreshold) {
