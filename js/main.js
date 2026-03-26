@@ -1,79 +1,75 @@
 // ========== ПОЛИФИЛЛЫ ДЛЯ СТАРЫХ БРАУЗЕРОВ ==========
-// Полифилл для smooth scroll (для Safari и старых браузеров)
 (function() {
-    // Проверяем поддержку smooth scroll
-    if ('scrollBehavior' in document.documentElement.style) {
-        return; // Smooth scroll поддерживается
+    // Полифилл для smooth scroll
+    if (!('scrollBehavior' in document.documentElement.style)) {
+        const smoothScrollTo = (element, duration = 500) => {
+            const targetPosition = element.getBoundingClientRect().top;
+            const startPosition = window.pageYOffset;
+            const distance = targetPosition - 80;
+            let startTime = null;
+            
+            const animation = (currentTime) => {
+                if (startTime === null) startTime = currentTime;
+                const timeElapsed = currentTime - startTime;
+                const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
+            };
+            
+            const easeInOutCubic = (t, b, c, d) => {
+                t /= d / 2;
+                if (t < 1) return c / 2 * t * t * t + b;
+                t -= 2;
+                return c / 2 * (t * t * t + 2) + b;
+            };
+            
+            requestAnimationFrame(animation);
+        };
+        
+        window.smoothScrollToPolyfill = smoothScrollTo;
     }
     
-    // Полифилл для smooth scroll
-    const smoothScrollTo = (element, duration = 500) => {
-        const targetPosition = element.getBoundingClientRect().top;
-        const startPosition = window.pageYOffset;
-        const distance = targetPosition - 80; // Учитываем хедер
-        let startTime = null;
-        
-        const animation = (currentTime) => {
-            if (startTime === null) startTime = currentTime;
-            const timeElapsed = currentTime - startTime;
-            const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
-            window.scrollTo(0, run);
-            if (timeElapsed < duration) requestAnimationFrame(animation);
-        };
-        
-        const easeInOutCubic = (t, b, c, d) => {
-            t /= d / 2;
-            if (t < 1) return c / 2 * t * t * t + b;
-            t -= 2;
-            return c / 2 * (t * t * t + 2) + b;
-        };
-        
-        requestAnimationFrame(animation);
-    };
-    
-    window.smoothScrollToPolyfill = smoothScrollTo;
-})();
-
-// Полифилл для Intersection Observer (для IE и старых браузеров)
-if (!window.IntersectionObserver) {
-    window.IntersectionObserver = class IntersectionObserver {
-        constructor(callback) {
-            this.callback = callback;
-            this.elements = [];
-            this.interval = null;
-        }
-        
-        observe(element) {
-            this.elements.push(element);
-            this.checkVisibility();
-            if (!this.interval) {
-                this.interval = setInterval(() => this.checkVisibility(), 100);
-            }
-        }
-        
-        unobserve(element) {
-            const index = this.elements.indexOf(element);
-            if (index > -1) {
-                this.elements.splice(index, 1);
-            }
-            if (this.elements.length === 0 && this.interval) {
-                clearInterval(this.interval);
+    // Полифилл для Intersection Observer
+    if (!window.IntersectionObserver) {
+        window.IntersectionObserver = class IntersectionObserver {
+            constructor(callback) {
+                this.callback = callback;
+                this.elements = [];
                 this.interval = null;
             }
-        }
-        
-        checkVisibility() {
-            this.elements.forEach(element => {
-                const rect = element.getBoundingClientRect();
-                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
-                if (isVisible) {
-                    this.callback([{ target: element, isIntersecting: true }]);
-                    this.unobserve(element);
+            
+            observe(element) {
+                this.elements.push(element);
+                this.checkVisibility();
+                if (!this.interval) {
+                    this.interval = setInterval(() => this.checkVisibility(), 100);
                 }
-            });
-        }
-    };
-}
+            }
+            
+            unobserve(element) {
+                const index = this.elements.indexOf(element);
+                if (index > -1) {
+                    this.elements.splice(index, 1);
+                }
+                if (this.elements.length === 0 && this.interval) {
+                    clearInterval(this.interval);
+                    this.interval = null;
+                }
+            }
+            
+            checkVisibility() {
+                this.elements.forEach(element => {
+                    const rect = element.getBoundingClientRect();
+                    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                    if (isVisible) {
+                        this.callback([{ target: element, isIntersecting: true }]);
+                        this.unobserve(element);
+                    }
+                });
+            }
+        };
+    }
+})();
 
 // ========== Модуль управления навигацией ==========
 const Navigation = (() => {
@@ -82,7 +78,6 @@ const Navigation = (() => {
     const navLinks = document.querySelector('.nav-links');
     const navItems = document.querySelectorAll('.nav-link');
     
-    // Функция для обновления активного состояния меню
     const updateActiveLink = () => {
         const scrollPosition = window.pageYOffset + 100;
         
@@ -105,7 +100,6 @@ const Navigation = (() => {
         });
     };
     
-    // Обработка скролла
     const handleScroll = () => {
         if (window.pageYOffset > 50) {
             header.classList.add('scrolled');
@@ -115,7 +109,6 @@ const Navigation = (() => {
         updateActiveLink();
     };
     
-    // Открытие/закрытие мобильного меню
     const toggleMobileMenu = () => {
         if (!navLinks || !mobileBtn) return;
         
@@ -126,7 +119,6 @@ const Navigation = (() => {
         document.body.style.overflow = isExpanded ? 'hidden' : '';
     };
     
-    // Закрытие мобильного меню
     const closeMobileMenu = () => {
         if (!navLinks || !mobileBtn) return;
         
@@ -136,7 +128,6 @@ const Navigation = (() => {
         document.body.style.overflow = '';
     };
     
-    // Плавная прокрутка к секциям
     const smoothScrollTo = (targetId) => {
         if (!targetId) return;
         
@@ -147,17 +138,14 @@ const Navigation = (() => {
             const elementPosition = targetSection.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
             
-            // Проверяем поддержку smooth scroll
             if ('scrollBehavior' in document.documentElement.style) {
                 window.scrollTo({
                     top: offsetPosition,
                     behavior: 'smooth'
                 });
             } else if (window.smoothScrollToPolyfill) {
-                // Используем полифилл
                 window.smoothScrollToPolyfill(targetSection, 500);
             } else {
-                // Простая прокрутка
                 window.scrollTo(0, offsetPosition);
             }
             
@@ -165,7 +153,6 @@ const Navigation = (() => {
         }
     };
     
-    // Обработчик клика по ссылкам навигации
     const handleNavClick = (event) => {
         event.preventDefault();
         const link = event.currentTarget;
@@ -173,28 +160,21 @@ const Navigation = (() => {
         smoothScrollTo(targetId);
     };
     
-    // Инициализация
     const init = () => {
         if (header) {
-            window.addEventListener('scroll', handleScroll);
-            // Для IE
             window.addEventListener('scroll', handleScroll);
         }
         
         if (mobileBtn) {
             mobileBtn.addEventListener('click', toggleMobileMenu);
-            // Для мобильных устройств
             mobileBtn.addEventListener('touchstart', toggleMobileMenu);
         }
         
-        // Добавляем обработчики для каждой ссылки
         navItems.forEach(link => {
             link.addEventListener('click', handleNavClick);
-            // Для мобильных устройств
             link.addEventListener('touchstart', handleNavClick);
         });
         
-        // Закрытие меню при клике вне его
         document.addEventListener('click', (e) => {
             if (navLinks && navLinks.classList.contains('active')) {
                 if (!navLinks.contains(e.target) && mobileBtn && !mobileBtn.contains(e.target)) {
@@ -203,7 +183,6 @@ const Navigation = (() => {
             }
         });
         
-        // Закрытие меню при изменении размера окна
         window.addEventListener('resize', () => {
             if (window.innerWidth > 768 && navLinks && navLinks.classList.contains('active')) {
                 closeMobileMenu();
@@ -311,7 +290,6 @@ const Visionaries = (() => {
                 resetTouched();
                 card.classList.add('touched');
             });
-            // Для мобильных устройств
             card.addEventListener('touchstart', (e) => {
                 e.stopPropagation();
                 resetTouched();
@@ -359,7 +337,7 @@ const ScrollAnimations = (() => {
         }, observerOptions);
         
         const animatedElements = document.querySelectorAll(
-            '.synopsis, .timeline-item, .visionary-card, .contact-card, .info-card'
+            '.synopsis, .timeline-item, .visionary-card, .contact-card, .info-card, .premiere-card'
         );
         
         animatedElements.forEach(el => {
@@ -396,13 +374,12 @@ const LogoScroll = (() => {
     return { init };
 })();
 
-// ========== Модуль для фиксации проблем с :hover на мобильных ==========
+// ========== Модуль для мобильных устройств ==========
 const TouchHandler = (() => {
     const init = () => {
         if ('ontouchstart' in window) {
             document.body.classList.add('touch-device');
             
-            // Отключаем :hover эффекты на мобильных через CSS
             const style = document.createElement('style');
             style.textContent = `
                 .touch-device .visionary-card:hover .visionary-img {
@@ -430,9 +407,8 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Лендинг успешно загружен');
 });
 
-// ========== Дополнительная оптимизация для старых браузеров ==========
+// ========== Оптимизация производительности ==========
 window.addEventListener('load', () => {
-    // Ленивая загрузка изображений
     const images = document.querySelectorAll('img[data-src]');
     images.forEach(img => {
         if (img.dataset.src) {
@@ -440,21 +416,4 @@ window.addEventListener('load', () => {
             img.removeAttribute('data-src');
         }
     });
-    
-    // Фикс для iOS Safari
-    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const target = document.querySelector(targetId);
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                }
-            });
-        });
-    }
 });
