@@ -1,26 +1,27 @@
 // ========== ПОЛИФИЛЛЫ ДЛЯ СТАРЫХ БРАУЗЕРОВ ==========
 (function() {
-    // Полифилл для smooth scroll
+    // Полифилл для smooth scroll (для Safari, IE)
     if (!('scrollBehavior' in document.documentElement.style)) {
-        const smoothScrollTo = (element, duration = 500) => {
-            const targetPosition = element.getBoundingClientRect().top;
-            const startPosition = window.pageYOffset;
-            const distance = targetPosition - 80;
-            let startTime = null;
+        var smoothScrollTo = function(element, duration) {
+            duration = duration || 500;
+            var targetPosition = element.getBoundingClientRect().top;
+            var startPosition = window.pageYOffset;
+            var distance = targetPosition - 80;
+            var startTime = null;
             
-            const animation = (currentTime) => {
-                if (startTime === null) startTime = currentTime;
-                const timeElapsed = currentTime - startTime;
-                const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
-                window.scrollTo(0, run);
-                if (timeElapsed < duration) requestAnimationFrame(animation);
-            };
-            
-            const easeInOutCubic = (t, b, c, d) => {
+            var easeInOutCubic = function(t, b, c, d) {
                 t /= d / 2;
                 if (t < 1) return c / 2 * t * t * t + b;
                 t -= 2;
                 return c / 2 * (t * t * t + 2) + b;
+            };
+            
+            var animation = function(currentTime) {
+                if (startTime === null) startTime = currentTime;
+                var timeElapsed = currentTime - startTime;
+                var run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
+                window.scrollTo(0, run);
+                if (timeElapsed < duration) requestAnimationFrame(animation);
             };
             
             requestAnimationFrame(animation);
@@ -29,25 +30,24 @@
         window.smoothScrollToPolyfill = smoothScrollTo;
     }
     
-    // Полифилл для Intersection Observer
+    // Полифилл для Intersection Observer (для IE)
     if (!window.IntersectionObserver) {
-        window.IntersectionObserver = class IntersectionObserver {
-            constructor(callback) {
-                this.callback = callback;
-                this.elements = [];
-                this.interval = null;
-            }
+        window.IntersectionObserver = function(callback) {
+            this.callback = callback;
+            this.elements = [];
+            this.interval = null;
             
-            observe(element) {
+            this.observe = function(element) {
                 this.elements.push(element);
                 this.checkVisibility();
                 if (!this.interval) {
-                    this.interval = setInterval(() => this.checkVisibility(), 100);
+                    var self = this;
+                    this.interval = setInterval(function() { self.checkVisibility(); }, 100);
                 }
-            }
+            };
             
-            unobserve(element) {
-                const index = this.elements.indexOf(element);
+            this.unobserve = function(element) {
+                var index = this.elements.indexOf(element);
                 if (index > -1) {
                     this.elements.splice(index, 1);
                 }
@@ -55,41 +55,42 @@
                     clearInterval(this.interval);
                     this.interval = null;
                 }
-            }
+            };
             
-            checkVisibility() {
-                this.elements.forEach(element => {
-                    const rect = element.getBoundingClientRect();
-                    const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+            this.checkVisibility = function() {
+                var self = this;
+                this.elements.forEach(function(element) {
+                    var rect = element.getBoundingClientRect();
+                    var isVisible = rect.top < window.innerHeight && rect.bottom > 0;
                     if (isVisible) {
-                        this.callback([{ target: element, isIntersecting: true }]);
-                        this.unobserve(element);
+                        self.callback([{ target: element, isIntersecting: true }]);
+                        self.unobserve(element);
                     }
                 });
-            }
+            };
         };
     }
 })();
 
 // ========== Модуль управления навигацией ==========
-const Navigation = (() => {
-    const header = document.querySelector('.header');
-    const mobileBtn = document.querySelector('.mobile-menu-btn');
-    const navLinks = document.querySelector('.nav-links');
-    const navItems = document.querySelectorAll('.nav-link');
+var Navigation = (function() {
+    var header = document.querySelector('.header');
+    var mobileBtn = document.querySelector('.mobile-menu-btn');
+    var navLinks = document.querySelector('.nav-links');
+    var navItems = document.querySelectorAll('.nav-link');
     
-    const updateActiveLink = () => {
-        const scrollPosition = window.pageYOffset + 100;
+    var updateActiveLink = function() {
+        var scrollPosition = window.pageYOffset + 100;
         
-        navItems.forEach(link => {
-            const sectionId = link.getAttribute('href');
+        navItems.forEach(function(link) {
+            var sectionId = link.getAttribute('href');
             if (!sectionId) return;
             
-            const section = document.querySelector(sectionId);
+            var section = document.querySelector(sectionId);
             
             if (section) {
-                const sectionTop = section.offsetTop;
-                const sectionBottom = sectionTop + section.offsetHeight;
+                var sectionTop = section.offsetTop;
+                var sectionBottom = sectionTop + section.offsetHeight;
                 
                 if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
                     link.classList.add('active');
@@ -100,7 +101,7 @@ const Navigation = (() => {
         });
     };
     
-    const handleScroll = () => {
+    var handleScroll = function() {
         if (window.pageYOffset > 50) {
             header.classList.add('scrolled');
         } else {
@@ -109,17 +110,17 @@ const Navigation = (() => {
         updateActiveLink();
     };
     
-    const toggleMobileMenu = () => {
+    var toggleMobileMenu = function() {
         if (!navLinks || !mobileBtn) return;
         
         navLinks.classList.toggle('active');
         mobileBtn.classList.toggle('active');
-        const isExpanded = navLinks.classList.contains('active');
+        var isExpanded = navLinks.classList.contains('active');
         mobileBtn.setAttribute('aria-expanded', isExpanded);
         document.body.style.overflow = isExpanded ? 'hidden' : '';
     };
     
-    const closeMobileMenu = () => {
+    var closeMobileMenu = function() {
         if (!navLinks || !mobileBtn) return;
         
         navLinks.classList.remove('active');
@@ -128,15 +129,15 @@ const Navigation = (() => {
         document.body.style.overflow = '';
     };
     
-    const smoothScrollTo = (targetId) => {
+    var smoothScrollTo = function(targetId) {
         if (!targetId) return;
         
-        const targetSection = document.querySelector(targetId);
+        var targetSection = document.querySelector(targetId);
         
         if (targetSection) {
-            const headerOffset = 80;
-            const elementPosition = targetSection.getBoundingClientRect().top;
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            var headerOffset = 80;
+            var elementPosition = targetSection.getBoundingClientRect().top;
+            var offsetPosition = elementPosition + window.pageYOffset - headerOffset;
             
             if ('scrollBehavior' in document.documentElement.style) {
                 window.scrollTo({
@@ -153,14 +154,14 @@ const Navigation = (() => {
         }
     };
     
-    const handleNavClick = (event) => {
+    var handleNavClick = function(event) {
         event.preventDefault();
-        const link = event.currentTarget;
-        const targetId = link.getAttribute('href');
+        var link = event.currentTarget;
+        var targetId = link.getAttribute('href');
         smoothScrollTo(targetId);
     };
     
-    const init = () => {
+    var init = function() {
         if (header) {
             window.addEventListener('scroll', handleScroll);
         }
@@ -170,12 +171,12 @@ const Navigation = (() => {
             mobileBtn.addEventListener('touchstart', toggleMobileMenu);
         }
         
-        navItems.forEach(link => {
+        navItems.forEach(function(link) {
             link.addEventListener('click', handleNavClick);
             link.addEventListener('touchstart', handleNavClick);
         });
         
-        document.addEventListener('click', (e) => {
+        document.addEventListener('click', function(e) {
             if (navLinks && navLinks.classList.contains('active')) {
                 if (!navLinks.contains(e.target) && mobileBtn && !mobileBtn.contains(e.target)) {
                     closeMobileMenu();
@@ -183,7 +184,7 @@ const Navigation = (() => {
             }
         });
         
-        window.addEventListener('resize', () => {
+        window.addEventListener('resize', function() {
             if (window.innerWidth > 768 && navLinks && navLinks.classList.contains('active')) {
                 closeMobileMenu();
             }
@@ -192,11 +193,11 @@ const Navigation = (() => {
         handleScroll();
     };
     
-    return { init };
+    return { init: init };
 })();
 
 // ========== Модуль данных визионеров ==========
-const VisionariesData = [
+var VisionariesData = [
     {
         name: "Алексей Воронов",
         company: "Росатом",
@@ -242,34 +243,34 @@ const VisionariesData = [
 ];
 
 // ========== Модуль рендеринга визионеров ==========
-const Visionaries = (() => {
-    const gridContainer = document.getElementById('visionariesGrid');
+var Visionaries = (function() {
+    var gridContainer = document.getElementById('visionariesGrid');
     
-    const escapeHtml = (str) => {
+    var escapeHtml = function(str) {
         if (!str) return '';
-        const div = document.createElement('div');
+        var div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
     };
     
-    const createCard = (visionary) => {
-        const card = document.createElement('div');
+    var createCard = function(visionary) {
+        var card = document.createElement('div');
         card.className = 'visionary-card';
         
-        const img = document.createElement('img');
+        var img = document.createElement('img');
         img.src = visionary.img;
         img.alt = visionary.name;
         img.className = 'visionary-img';
         img.loading = 'lazy';
         
-        const infoDiv = document.createElement('div');
+        var infoDiv = document.createElement('div');
         infoDiv.className = 'hover-card-info';
-        infoDiv.innerHTML = `
-            <div class="visionary-name">${escapeHtml(visionary.name)}</div>
-            <div class="visionary-company">${escapeHtml(visionary.company)}</div>
-            <div class="visionary-role">${escapeHtml(visionary.position)}</div>
-            <div class="visionary-desc">✨ Визионерство: ${escapeHtml(visionary.vision)}</div>
-        `;
+        infoDiv.innerHTML = [
+            '<div class="visionary-name">', escapeHtml(visionary.name), '</div>',
+            '<div class="visionary-company">', escapeHtml(visionary.company), '</div>',
+            '<div class="visionary-role">', escapeHtml(visionary.position), '</div>',
+            '<div class="visionary-desc">✨ Визионерство: ', escapeHtml(visionary.vision), '</div>'
+        ].join('');
         
         card.appendChild(img);
         card.appendChild(infoDiv);
@@ -277,57 +278,57 @@ const Visionaries = (() => {
         return card;
     };
     
-    const initTouchEvents = () => {
-        const cards = document.querySelectorAll('.visionary-card');
+    var initTouchEvents = function() {
+        var cards = document.querySelectorAll('.visionary-card');
         
-        const resetTouched = () => {
-            cards.forEach(card => card.classList.remove('touched'));
+        var resetTouched = function() {
+            cards.forEach(function(card) { card.classList.remove('touched'); });
         };
         
-        cards.forEach(card => {
-            card.addEventListener('click', (e) => {
+        cards.forEach(function(card) {
+            card.addEventListener('click', function(e) {
                 e.stopPropagation();
                 resetTouched();
                 card.classList.add('touched');
             });
-            card.addEventListener('touchstart', (e) => {
+            card.addEventListener('touchstart', function(e) {
                 e.stopPropagation();
                 resetTouched();
                 card.classList.add('touched');
             });
         });
         
-        document.body.addEventListener('click', (e) => {
+        document.body.addEventListener('click', function(e) {
             if (!e.target.closest('.visionary-card')) {
                 resetTouched();
             }
         });
     };
     
-    const render = () => {
+    var render = function() {
         if (!gridContainer) return;
         
         gridContainer.innerHTML = '';
-        VisionariesData.forEach(visionary => {
+        VisionariesData.forEach(function(visionary) {
             gridContainer.appendChild(createCard(visionary));
         });
         
         initTouchEvents();
     };
     
-    return { render };
+    return { render: render };
 })();
 
 // ========== Модуль анимаций при скролле ==========
-const ScrollAnimations = (() => {
-    const init = () => {
-        const observerOptions = {
+var ScrollAnimations = (function() {
+    var init = function() {
+        var observerOptions = {
             threshold: 0.1,
             rootMargin: '0px 0px -50px 0px'
         };
         
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
                 if (entry.isIntersecting) {
                     entry.target.style.opacity = '1';
                     entry.target.style.transform = 'translateY(0)';
@@ -336,11 +337,11 @@ const ScrollAnimations = (() => {
             });
         }, observerOptions);
         
-        const animatedElements = document.querySelectorAll(
+        var animatedElements = document.querySelectorAll(
             '.synopsis, .timeline-item, .visionary-card, .contact-card, .info-card, .premiere-card'
         );
         
-        animatedElements.forEach(el => {
+        animatedElements.forEach(function(el) {
             el.style.opacity = '0';
             el.style.transform = 'translateY(20px)';
             el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
@@ -348,16 +349,16 @@ const ScrollAnimations = (() => {
         });
     };
     
-    return { init };
+    return { init: init };
 })();
 
 // ========== Модуль обработки скролла для логотипа ==========
-const LogoScroll = (() => {
-    const logo = document.querySelector('.logo');
+var LogoScroll = (function() {
+    var logo = document.querySelector('.logo');
     
-    const init = () => {
+    var init = function() {
         if (logo) {
-            logo.addEventListener('click', (e) => {
+            logo.addEventListener('click', function(e) {
                 e.preventDefault();
                 if ('scrollBehavior' in document.documentElement.style) {
                     window.scrollTo({
@@ -371,65 +372,57 @@ const LogoScroll = (() => {
         }
     };
     
-    return { init };
+    return { init: init };
 })();
 
 // ========== Модуль для мобильных устройств ==========
-const TouchHandler = (() => {
-    const init = () => {
+var TouchHandler = (function() {
+    var init = function() {
         if ('ontouchstart' in window) {
             document.body.classList.add('touch-device');
             
-            const style = document.createElement('style');
-            style.textContent = `
-                .touch-device .visionary-card:hover .visionary-img {
-                    filter: grayscale(0.4);
-                }
-                .touch-device .visionary-card:hover .hover-card-info {
-                    opacity: 0;
-                }
-            `;
+            var style = document.createElement('style');
+            style.textContent = [
+                '.touch-device .visionary-card:hover .visionary-img { filter: grayscale(0.4); }',
+                '.touch-device .visionary-card:hover .hover-card-info { opacity: 0; }'
+            ].join('');
             document.head.appendChild(style);
         }
     };
     
-    return { init };
+    return { init: init };
 })();
 
-// ========== Модуль фиксированного нижнего блока (компактная планета) ==========
-const StickyFooter = (() => {
-    const stickyCard = document.querySelector('.sticky-footer-card');
-    let lastScrollY = window.pageYOffset;
-    let ticking = false;
-    let isVisible = false;
+// ========== Модуль фиксированного нижнего блока ==========
+var StickyFooter = (function() {
+    var stickyBar = document.querySelector('.sticky-footer-bar');
+    var ticking = false;
+    var isVisible = false;
     
-    const handleScroll = () => {
-        if (!stickyCard) return;
+    var handleScroll = function() {
+        if (!stickyBar) return;
         
-        const currentScrollY = window.pageYOffset;
-        const scrollThreshold = 300;
+        var currentScrollY = window.pageYOffset;
+        var scrollThreshold = 300;
         
-        // Показываем блок после прокрутки на 300px
         if (currentScrollY > scrollThreshold && !isVisible) {
-            stickyCard.classList.remove('hide');
+            stickyBar.classList.remove('hide');
             isVisible = true;
         } else if (currentScrollY <= scrollThreshold && isVisible) {
-            stickyCard.classList.add('hide');
+            stickyBar.classList.add('hide');
             isVisible = false;
         }
         
-        lastScrollY = currentScrollY;
         ticking = false;
     };
     
-    const init = () => {
-        if (!stickyCard) return;
+    var init = function() {
+        if (!stickyBar) return;
         
-        // Изначально скрыт
-        stickyCard.classList.add('hide');
+        stickyBar.classList.add('hide');
         isVisible = false;
         
-        window.addEventListener('scroll', () => {
+        window.addEventListener('scroll', function() {
             if (!ticking) {
                 requestAnimationFrame(handleScroll);
                 ticking = true;
@@ -437,11 +430,11 @@ const StickyFooter = (() => {
         });
     };
     
-    return { init };
+    return { init: init };
 })();
 
 // ========== Инициализация приложения ==========
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', function() {
     Navigation.init();
     Visionaries.render();
     ScrollAnimations.init();
@@ -453,9 +446,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // ========== Оптимизация производительности ==========
-window.addEventListener('load', () => {
-    const images = document.querySelectorAll('img[data-src]');
-    images.forEach(img => {
+window.addEventListener('load', function() {
+    var images = document.querySelectorAll('img[data-src]');
+    images.forEach(function(img) {
         if (img.dataset.src) {
             img.src = img.dataset.src;
             img.removeAttribute('data-src');
