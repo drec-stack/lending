@@ -396,6 +396,52 @@ const TouchHandler = (() => {
     return { init };
 })();
 
+// ========== Модуль фиксированного нижнего блока ==========
+const StickyFooter = (() => {
+    const stickyCard = document.querySelector('.sticky-footer-card');
+    let lastScrollY = window.pageYOffset;
+    let ticking = false;
+    
+    const handleScroll = () => {
+        if (!stickyCard) return;
+        
+        const currentScrollY = window.pageYOffset;
+        const scrollThreshold = 200;
+        
+        // Показываем блок после прокрутки на 200px
+        if (currentScrollY > scrollThreshold) {
+            stickyCard.classList.remove('hide');
+        } else {
+            stickyCard.classList.add('hide');
+        }
+        
+        // Скрываем при скролле вниз, показываем при скролле вверх
+        if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold + 100) {
+            stickyCard.classList.add('hide');
+        } else if (currentScrollY < lastScrollY && currentScrollY > scrollThreshold) {
+            stickyCard.classList.remove('hide');
+        }
+        
+        lastScrollY = currentScrollY;
+        ticking = false;
+    };
+    
+    const init = () => {
+        if (!stickyCard) return;
+        
+        stickyCard.classList.add('hide');
+        
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(handleScroll);
+                ticking = true;
+            }
+        });
+    };
+    
+    return { init };
+})();
+
 // ========== Инициализация приложения ==========
 document.addEventListener('DOMContentLoaded', () => {
     Navigation.init();
@@ -403,6 +449,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ScrollAnimations.init();
     LogoScroll.init();
     TouchHandler.init();
+    StickyFooter.init();
     
     console.log('Лендинг успешно загружен');
 });
