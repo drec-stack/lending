@@ -11,6 +11,8 @@ const Navigation = (() => {
         
         navItems.forEach(link => {
             const sectionId = link.getAttribute('href');
+            if (!sectionId) return;
+            
             const section = document.querySelector(sectionId);
             
             if (section) {
@@ -39,6 +41,8 @@ const Navigation = (() => {
     
     // Открытие/закрытие мобильного меню
     const toggleMobileMenu = () => {
+        if (!navLinks || !mobileBtn) return;
+        
         navLinks.classList.toggle('active');
         mobileBtn.classList.toggle('active');
         const isExpanded = navLinks.classList.contains('active');
@@ -48,6 +52,8 @@ const Navigation = (() => {
     
     // Закрытие мобильного меню
     const closeMobileMenu = () => {
+        if (!navLinks || !mobileBtn) return;
+        
         navLinks.classList.remove('active');
         mobileBtn.classList.remove('active');
         mobileBtn.setAttribute('aria-expanded', 'false');
@@ -56,6 +62,8 @@ const Navigation = (() => {
     
     // Плавная прокрутка к секциям
     const smoothScrollTo = (targetId) => {
+        if (!targetId) return;
+        
         const targetSection = document.querySelector(targetId);
         
         if (targetSection) {
@@ -74,17 +82,24 @@ const Navigation = (() => {
     };
     
     // Обработчик клика по ссылкам навигации
-    const handleNavClick = (e) => {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
+    const handleNavClick = (event) => {
+        event.preventDefault();
+        const link = event.currentTarget;
+        const targetId = link.getAttribute('href');
         smoothScrollTo(targetId);
     };
     
     // Инициализация
     const init = () => {
-        if (header) window.addEventListener('scroll', handleScroll);
-        if (mobileBtn) mobileBtn.addEventListener('click', toggleMobileMenu);
+        if (header) {
+            window.addEventListener('scroll', handleScroll);
+        }
         
+        if (mobileBtn) {
+            mobileBtn.addEventListener('click', toggleMobileMenu);
+        }
+        
+        // Добавляем обработчики для каждой ссылки
         navItems.forEach(link => {
             link.addEventListener('click', handleNavClick);
         });
@@ -92,15 +107,15 @@ const Navigation = (() => {
         // Закрытие меню при клике вне его
         document.addEventListener('click', (e) => {
             if (navLinks && navLinks.classList.contains('active')) {
-                if (!navLinks.contains(e.target) && !mobileBtn.contains(e.target)) {
+                if (!navLinks.contains(e.target) && mobileBtn && !mobileBtn.contains(e.target)) {
                     closeMobileMenu();
                 }
             }
         });
         
-        // Закрытие меню при изменении размера окна (на случай, если меню открыто на десктопе)
+        // Закрытие меню при изменении размера окна
         window.addEventListener('resize', () => {
-            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+            if (window.innerWidth > 768 && navLinks && navLinks.classList.contains('active')) {
                 closeMobileMenu();
             }
         });
@@ -307,7 +322,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========== Оптимизация производительности ==========
 window.addEventListener('load', () => {
     // Ленивая загрузка изображений уже встроена через loading="lazy"
-    // Дополнительная оптимизация для больших изображений
     const images = document.querySelectorAll('img[data-src]');
     images.forEach(img => {
         if (img.dataset.src) {
