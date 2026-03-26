@@ -6,8 +6,9 @@
     <meta name="description" content="Премьера документального фильма-исследования «1/8 Земли: Визионеры России». Закрытый показ в кинотеатре «Художественный» 24 апреля 2026.">
     <meta name="keywords" content="1/8 Земли, визионеры России, премьера, документальный фильм, промышленность">
     <meta name="author" content="1/8 Earth">
+    <meta name="yandex-verification" content="1/8 Земли">
     
-    <title>1/8 Земли: Визионеры России | Премьера фильма-исследования</title>
+    <title>1/8 Земли: Визионеры России | Промышленность, которую невозможно представить</title>
     
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
@@ -43,7 +44,6 @@
         <section id="hero" class="hero">
             <div class="container">
                 <div class="hero-grid">
-                    <!-- Левая колонка: основной контент -->
                     <div class="hero-content">
                         <div class="hero-badge">Премьера документального фильма-исследования</div>
                         <h1 class="hero-title">
@@ -112,7 +112,6 @@
                         </div>
                     </div>
                     
-                    <!-- Правая колонка: стильная карточка анонса -->
                     <div class="hero-card">
                         <div class="premiere-card">
                             <div class="card-tag">ПРЕМЬЕРА</div>
@@ -354,25 +353,57 @@
         </div>
     </footer>
 
-    <!-- ФИКСИРОВАННЫЙ БЛОК ВНИЗУ (ПРИЖАТ К НИЗУ) -->
-    <div class="sticky-footer-bar">
-        <div class="sticky-bar-container">
-            <div class="sticky-info">
-                <div class="sticky-date">24/04</div>
-                <div class="sticky-time">19:00 – 22:00</div>
-                <div class="sticky-separator">|</div>
-                <div class="sticky-venue">
+    <!-- ФИКСИРОВАННЫЙ БЛОК С АНИМИРОВАННОЙ ПЛАНЕТОЙ -->
+    <div class="cosmic-footer">
+        <div class="cosmic-container">
+            <!-- Анимированная планета -->
+            <div class="cosmic-planet">
+                <div class="planet-core">
+                    <div class="planet-surface"></div>
+                    <div class="planet-atmo"></div>
+                    <div class="planet-ring"></div>
+                    <div class="planet-ring-2"></div>
+                </div>
+                <div class="planet-orbit">
+                    <div class="orbit-dot"></div>
+                    <div class="orbit-dot delay-1"></div>
+                    <div class="orbit-dot delay-2"></div>
+                </div>
+                <div class="planet-glow"></div>
+                <div class="planet-number">1/8</div>
+            </div>
+            
+            <!-- Информация о событии -->
+            <div class="cosmic-info">
+                <div class="info-time">
+                    <span class="time-value">19:00</span>
+                    <span class="time-label">ЧЕТВЕРГ</span>
+                </div>
+                <div class="info-date">
+                    <span class="date-value">24/04</span>
+                    <span class="date-label">АПРЕЛЯ 2026</span>
+                </div>
+                <div class="info-venue">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                         <circle cx="12" cy="10" r="3"></circle>
                     </svg>
                     <span>Кинотеатр «Художественный»</span>
                 </div>
+                <div class="info-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                    <span>Закрытый показ</span>
+                </div>
             </div>
-            <div class="sticky-actions">
+            
+            <!-- Кнопки календарей -->
+            <div class="cosmic-actions">
                 <a href="https://calendar.yandex.ru/event/3012415913?applyToFuture=0&event_date=2026-04-24T16%3A00%3A00&layerId=18800113&show_date=2026-04-24" 
                    target="_blank" 
-                   class="sticky-btn"
+                   class="cosmic-btn"
                    rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -380,11 +411,11 @@
                         <line x1="8" y1="2" x2="8" y2="6"></line>
                         <line x1="3" y1="10" x2="21" y2="10"></line>
                     </svg>
-                    <span>Яндекс.Календарь</span>
+                    <span>Яндекс</span>
                 </a>
                 <a href="https://calendar.app.google/exoKvCTadAc44uR16" 
                    target="_blank" 
-                   class="sticky-btn"
+                   class="cosmic-btn"
                    rel="noopener noreferrer">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
@@ -392,10 +423,17 @@
                         <line x1="8" y1="2" x2="8" y2="6"></line>
                         <line x1="3" y1="10" x2="21" y2="10"></line>
                     </svg>
-                    <span>Google Календарь</span>
+                    <span>Google</span>
                 </a>
             </div>
         </div>
+        
+        <!-- Декоративные звезды -->
+        <div class="star star-1"></div>
+        <div class="star star-2"></div>
+        <div class="star star-3"></div>
+        <div class="star star-4"></div>
+        <div class="star star-5"></div>
     </div>
 
     <!-- Main JavaScript -->
