@@ -3,55 +3,90 @@ const Navigation = (() => {
     const header = document.querySelector('.header');
     const mobileBtn = document.querySelector('.mobile-menu-btn');
     const navLinks = document.querySelector('.nav-links');
-    const navItems = document.querySelectorAll('.nav-links a');
-
-    // Обработка скролла для изменения прозрачности хедера
+    const navItems = document.querySelectorAll('.nav-link');
+    
+    // Функция для обновления активного состояния меню
+    const updateActiveLink = () => {
+        const scrollPosition = window.scrollY + 100; // Смещение для учета хедера
+        
+        navItems.forEach(link => {
+            const sectionId = link.getAttribute('href');
+            const section = document.querySelector(sectionId);
+            
+            if (section) {
+                const sectionTop = section.offsetTop;
+                const sectionBottom = sectionTop + section.offsetHeight;
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
+            }
+        });
+    };
+    
+    // Обработка скролла для изменения прозрачности хедера и активного пункта
     const handleScroll = () => {
         if (window.scrollY > 50) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
         }
+        
+        updateActiveLink();
     };
-
+    
     // Открытие/закрытие мобильного меню
     const toggleMobileMenu = () => {
         navLinks.classList.toggle('active');
-        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+        mobileBtn.classList.toggle('active');
+        const isExpanded = navLinks.classList.contains('active');
+        mobileBtn.setAttribute('aria-expanded', isExpanded);
+        document.body.style.overflow = isExpanded ? 'hidden' : '';
     };
-
-    // Закрытие мобильного меню при клике на ссылку
+    
+    // Закрытие мобильного меню
     const closeMobileMenu = () => {
         navLinks.classList.remove('active');
+        mobileBtn.classList.remove('active');
+        mobileBtn.setAttribute('aria-expanded', 'false');
         document.body.style.overflow = '';
     };
-
+    
     // Плавная прокрутка к секциям
-    const smoothScroll = (e) => {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
+    const smoothScrollTo = (targetId) => {
         const targetSection = document.querySelector(targetId);
         
         if (targetSection) {
             const headerOffset = 80;
             const elementPosition = targetSection.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
+            
             window.scrollTo({
                 top: offsetPosition,
                 behavior: 'smooth'
             });
             
+            // Закрываем мобильное меню после клика
             closeMobileMenu();
         }
     };
-
+    
+    // Обработчик клика по ссылкам навигации
+    const handleNavClick = (e) => {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        smoothScrollTo(targetId);
+    };
+    
+    // Инициализация
     const init = () => {
         if (header) window.addEventListener('scroll', handleScroll);
         if (mobileBtn) mobileBtn.addEventListener('click', toggleMobileMenu);
         
         navItems.forEach(link => {
-            link.addEventListener('click', smoothScroll);
+            link.addEventListener('click', handleNavClick);
         });
         
         // Закрытие меню при клике вне его
@@ -63,9 +98,17 @@ const Navigation = (() => {
             }
         });
         
+        // Закрытие меню при изменении размера окна (на случай, если меню открыто на десктопе)
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > 768 && navLinks.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+        
+        // Вызываем обработчик скролла для начальной установки активного пункта
         handleScroll();
     };
-
+    
     return { init };
 })();
 
@@ -119,6 +162,12 @@ const VisionariesData = [
 const Visionaries = (() => {
     const gridContainer = document.getElementById('visionariesGrid');
     
+    const escapeHtml = (str) => {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    };
+    
     const createCard = (visionary) => {
         const card = document.createElement('div');
         card.className = 'visionary-card';
@@ -142,12 +191,6 @@ const Visionaries = (() => {
         card.appendChild(infoDiv);
         
         return card;
-    };
-    
-    const escapeHtml = (str) => {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
     };
     
     const initTouchEvents = () => {
@@ -219,6 +262,25 @@ const ScrollAnimations = (() => {
     return { init };
 })();
 
+// ========== Модуль обработки скролла для логотипа ==========
+const LogoScroll = (() => {
+    const logo = document.querySelector('.logo');
+    
+    const init = () => {
+        if (logo) {
+            logo.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        }
+    };
+    
+    return { init };
+})();
+
 // ========== Модуль предотвращения конфликтов (Touch) ==========
 const TouchHandler = (() => {
     const init = () => {
@@ -236,6 +298,7 @@ document.addEventListener('DOMContentLoaded', () => {
     Navigation.init();
     Visionaries.render();
     ScrollAnimations.init();
+    LogoScroll.init();
     TouchHandler.init();
     
     console.log('Лендинг успешно загружен');
