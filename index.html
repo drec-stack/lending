@@ -42,74 +42,140 @@
     </header>
 
     <main>
-        <!-- Блок 1: Hero -->
+        <!-- Блок 1: Hero с карточкой анонса в стиле референса -->
         <section id="hero" class="hero">
             <div class="container">
-                <div class="hero-content">
-                    <div class="hero-badge">Премьера документального фильма-исследования</div>
-                    <h1 class="hero-title">
-                        1/8 Земли: Визионеры России.<br>
-                        Промышленность, которую невозможно (было) представить
-                    </h1>
-                    <div class="event-details">
-                        <div class="event-detail">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                            <span>24 апреля 2026</span>
+                <div class="hero-grid">
+                    <!-- Левая колонка: основной контент -->
+                    <div class="hero-content">
+                        <div class="hero-badge">Премьера документального фильма-исследования</div>
+                        <h1 class="hero-title">
+                            1/8 Земли: Визионеры России.<br>
+                            Промышленность, которую невозможно (было) представить
+                        </h1>
+                        <div class="event-details">
+                            <div class="event-detail">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                <span>24 апреля 2026</span>
+                            </div>
+                            <div class="event-detail">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <polyline points="12 6 12 12 16 14"></polyline>
+                                </svg>
+                                <span>19:00 – 22:00</span>
+                            </div>
+                            <div class="event-detail">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <a href="https://yandex.ru/profile/-/CPVRaLMy" target="_blank" class="map-link" rel="noopener noreferrer">
+                                    Кинотеатр «Художественный»
+                                </a>
+                            </div>
                         </div>
-                        <div class="event-detail">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
+                        <div class="invite-badge">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="12" cy="7" r="4"></circle>
                             </svg>
-                            <span>19:00 – 22:00</span>
+                            Закрытый показ по приглашениям
                         </div>
-                        <div class="event-detail">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                                <circle cx="12" cy="10" r="3"></circle>
-                            </svg>
-                            <a href="https://yandex.ru/profile/-/CPVRaLMy" target="_blank" class="map-link" rel="noopener noreferrer">
-                                Кинотеатр «Художественный»
+                        <div class="btn-group">
+                            <a href="https://calendar.yandex.ru/event/3012415913?applyToFuture=0&event_date=2026-04-24T16%3A00%3A00&layerId=18800113&show_date=2026-04-24" 
+                               target="_blank" 
+                               class="btn btn-primary"
+                               rel="noopener noreferrer">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Добавить в Яндекс.Календарь
+                            </a>
+                            <a href="https://calendar.app.google/exoKvCTadAc44uR16" 
+                               target="_blank" 
+                               class="btn btn-primary"
+                               rel="noopener noreferrer">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                Добавить в Google Календарь
                             </a>
                         </div>
                     </div>
-                    <div class="invite-badge">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                            <circle cx="12" cy="7" r="4"></circle>
-                        </svg>
-                        Закрытый показ по приглашениям
-                    </div>
-                    <div class="btn-group">
-                        <a href="https://calendar.yandex.ru/event/3012415913?applyToFuture=0&event_date=2026-04-24T16%3A00%3A00&layerId=18800113&show_date=2026-04-24" 
-                           target="_blank" 
-                           class="btn btn-primary"
-                           rel="noopener noreferrer">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                            Добавить в Яндекс.Календарь
-                        </a>
-                        <a href="https://calendar.app.google/exoKvCTadAc44uR16" 
-                           target="_blank" 
-                           class="btn btn-primary"
-                           rel="noopener noreferrer">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                <line x1="16" y1="2" x2="16" y2="6"></line>
-                                <line x1="8" y1="2" x2="8" y2="6"></line>
-                                <line x1="3" y1="10" x2="21" y2="10"></line>
-                            </svg>
-                            Добавить в Google Календарь
-                        </a>
+                    
+                    <!-- Правая колонка: стильная карточка анонса как на референсе -->
+                    <div class="hero-card">
+                        <div class="premiere-card">
+                            <div class="card-tag">ПРЕМЬЕРА</div>
+                            <div class="card-title">
+                                1/8 ЗЕМЛИ:<br>
+                                ВИЗИОНЕРЫ РОССИИ
+                            </div>
+                            <div class="card-subtitle">
+                                ПРОМЫШЛЕННОСТЬ, КОТОРУЮ НЕВОЗМОЖНО<br>
+                                (БЫЛО) ПРЕДСТАВИТЬ
+                            </div>
+                            <div class="card-divider"></div>
+                            <div class="card-datetime">
+                                <span class="date">24/04</span>
+                                <span class="time">19:00 – 22:00</span>
+                            </div>
+                            <div class="card-venue">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                    <circle cx="12" cy="10" r="3"></circle>
+                                </svg>
+                                <span>Кинотеатр «Художественный»</span>
+                            </div>
+                            <div class="card-closed-badge">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                Закрытый показ по приглашениям
+                            </div>
+                            <div class="card-buttons">
+                                <a href="https://calendar.yandex.ru/event/3012415913?applyToFuture=0&event_date=2026-04-24T16%3A00%3A00&layerId=18800113&show_date=2026-04-24" 
+                                   target="_blank" 
+                                   class="card-btn"
+                                   rel="noopener noreferrer">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    Яндекс.Календарь
+                                </a>
+                                <a href="https://calendar.app.google/exoKvCTadAc44uR16" 
+                                   target="_blank" 
+                                   class="card-btn"
+                                   rel="noopener noreferrer">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    </svg>
+                                    Google Календарь
+                                </a>
+                            </div>
+                            <div class="card-footer">
+                                <span class="pill">Вход строго по приглашениям</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
