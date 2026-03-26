@@ -396,28 +396,26 @@ const TouchHandler = (() => {
     return { init };
 })();
 
-// ========== Модуль фиксированного нижнего блока ==========
+// ========== Модуль фиксированного нижнего блока (компактная планета) ==========
 const StickyFooter = (() => {
     const stickyCard = document.querySelector('.sticky-footer-card');
     let lastScrollY = window.pageYOffset;
     let ticking = false;
+    let isVisible = false;
     
     const handleScroll = () => {
         if (!stickyCard) return;
         
         const currentScrollY = window.pageYOffset;
-        const scrollThreshold = 200;
+        const scrollThreshold = 300;
         
-        if (currentScrollY > scrollThreshold) {
+        // Показываем блок после прокрутки на 300px
+        if (currentScrollY > scrollThreshold && !isVisible) {
             stickyCard.classList.remove('hide');
-        } else {
+            isVisible = true;
+        } else if (currentScrollY <= scrollThreshold && isVisible) {
             stickyCard.classList.add('hide');
-        }
-        
-        if (currentScrollY > lastScrollY && currentScrollY > scrollThreshold + 100) {
-            stickyCard.classList.add('hide');
-        } else if (currentScrollY < lastScrollY && currentScrollY > scrollThreshold) {
-            stickyCard.classList.remove('hide');
+            isVisible = false;
         }
         
         lastScrollY = currentScrollY;
@@ -427,7 +425,9 @@ const StickyFooter = (() => {
     const init = () => {
         if (!stickyCard) return;
         
+        // Изначально скрыт
         stickyCard.classList.add('hide');
+        isVisible = false;
         
         window.addEventListener('scroll', () => {
             if (!ticking) {
