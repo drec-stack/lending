@@ -18,6 +18,7 @@ body {
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    padding-bottom: 80px;
 }
 
 .container {
@@ -41,6 +42,10 @@ section {
     .container {
         padding: 0 20px;
     }
+    
+    body {
+        padding-bottom: 120px;
+    }
 }
 
 /* ========== TYPOGRAPHY ========== */
@@ -60,9 +65,6 @@ section {
     left: 0;
     width: 60px;
     height: 3px;
-    background: -webkit-linear-gradient(90deg, #c7a55b, transparent);
-    background: -moz-linear-gradient(90deg, #c7a55b, transparent);
-    background: -o-linear-gradient(90deg, #c7a55b, transparent);
     background: linear-gradient(90deg, #c7a55b, transparent);
 }
 
@@ -91,10 +93,6 @@ h1, h2, h3 {
 }
 
 .nav {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -115,10 +113,6 @@ h1, h2, h3 {
 }
 
 .nav-links {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     gap: 2rem;
     list-style: none;
@@ -226,10 +220,6 @@ h1, h2, h3 {
 /* ========== HERO SECTION ========== */
 .hero {
     min-height: 100vh;
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     align-items: center;
     position: relative;
@@ -267,10 +257,6 @@ h1, h2, h3 {
 }
 
 .event-details {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     flex-wrap: wrap;
     gap: 2rem;
@@ -278,10 +264,6 @@ h1, h2, h3 {
 }
 
 .event-detail {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -314,7 +296,7 @@ h1, h2, h3 {
     margin: 1rem 0;
 }
 
-/* ========== ПРЕМЬЕРНАЯ КАРТОЧКА (СТИЛЬ РЕФЕРЕНСА) ========== */
+/* ========== ПРЕМЬЕРНАЯ КАРТОЧКА ========== */
 .premiere-card {
     background: #0f0f0f;
     border: 1px solid rgba(199, 165, 91, 0.3);
@@ -468,10 +450,6 @@ h1, h2, h3 {
     bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -479,7 +457,6 @@ h1, h2, h3 {
     opacity: 0.6;
     font-size: 0.75rem;
     animation: bounce 2s infinite;
-    -webkit-animation: bounce 2s infinite;
 }
 
 @keyframes bounce {
@@ -491,23 +468,8 @@ h1, h2, h3 {
     }
 }
 
-@-webkit-keyframes bounce {
-    0%, 100% {
-        -webkit-transform: translateX(-50%) translateY(0);
-        transform: translateX(-50%) translateY(0);
-    }
-    50% {
-        -webkit-transform: translateX(-50%) translateY(10px);
-        transform: translateX(-50%) translateY(10px);
-    }
-}
-
 /* ========== BUTTONS ========== */
 .btn-group {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -552,10 +514,6 @@ h1, h2, h3 {
 }
 
 .btn-group-vertical {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -580,8 +538,6 @@ h1, h2, h3 {
     border-radius: 24px;
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
     margin: 2rem 0;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 .video-wrapper iframe {
@@ -639,7 +595,6 @@ h1, h2, h3 {
 
 .visionaries-grid {
     display: grid;
-    display: -ms-grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
@@ -649,8 +604,6 @@ h1, h2, h3 {
     cursor: pointer;
     position: relative;
     transition: transform 0.3s ease;
-    -webkit-tap-highlight-color: rgba(199, 165, 91, 0.3);
-    tap-highlight-color: rgba(199, 165, 91, 0.3);
 }
 
 .visionary-card:hover {
@@ -663,14 +616,12 @@ h1, h2, h3 {
     object-fit: cover;
     border-radius: 20px;
     filter: grayscale(0.4);
-    -webkit-filter: grayscale(0.4);
     transition: all 0.4s ease;
     border: 1px solid #2c2c2c;
 }
 
 .visionary-card:hover .visionary-img {
     filter: grayscale(0);
-    -webkit-filter: grayscale(0);
     box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
     border-color: #c7a55b;
 }
@@ -737,10 +688,6 @@ h1, h2, h3 {
 }
 
 .timeline-item {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     flex-wrap: wrap;
     gap: 1.5rem;
@@ -789,7 +736,6 @@ h1, h2, h3 {
 /* ========== CONTACT SECTION ========== */
 .contact-wrapper {
     display: grid;
-    display: -ms-grid;
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
     background: #0f0f0f;
@@ -809,10 +755,6 @@ h1, h2, h3 {
 }
 
 .info-detail {
-    display: -webkit-box;
-    display: -moz-box;
-    display: -ms-flexbox;
-    display: -webkit-flex;
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -885,6 +827,181 @@ h1, h2, h3 {
     font-size: 0.75rem;
 }
 
+/* ========== ФИКСИРОВАННЫЙ БЛОК ВНИЗУ (КАК НА РЕФЕРЕНСЕ) ========== */
+.sticky-footer-card {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(199, 165, 91, 0.3);
+    padding: 0.75rem 1.5rem;
+    transform: translateY(0);
+    transition: transform 0.3s ease;
+}
+
+.sticky-footer-card.hide {
+    transform: translateY(100%);
+}
+
+.sticky-card-container {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.sticky-datetime {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+}
+
+.sticky-date {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #c7a55b;
+    line-height: 1;
+}
+
+.sticky-time {
+    font-size: 0.9rem;
+    color: #eaeaea;
+    font-weight: 500;
+}
+
+.sticky-venue {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #cccccc;
+}
+
+.sticky-venue svg {
+    stroke: #c7a55b;
+    width: 14px;
+    height: 14px;
+}
+
+.sticky-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(199, 165, 91, 0.15);
+    padding: 0.4rem 0.8rem;
+    border-radius: 48px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: #c7a55b;
+}
+
+.sticky-badge svg {
+    width: 12px;
+    height: 12px;
+}
+
+.sticky-buttons {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.sticky-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #1c1c1c;
+    border: 1px solid #2c2c2c;
+    border-radius: 48px;
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: #eaeaea;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.sticky-btn:hover {
+    border-color: #c7a55b;
+    background: #252525;
+    transform: translateY(-2px);
+}
+
+.sticky-btn svg {
+    width: 14px;
+    height: 14px;
+    stroke: #c7a55b;
+}
+
+@media (max-width: 768px) {
+    .sticky-footer-card {
+        padding: 0.6rem 1rem;
+    }
+    
+    .sticky-card-container {
+        gap: 0.75rem;
+        justify-content: center;
+    }
+    
+    .sticky-date {
+        font-size: 1.2rem;
+    }
+    
+    .sticky-time {
+        font-size: 0.8rem;
+    }
+    
+    .sticky-venue {
+        font-size: 0.75rem;
+    }
+    
+    .sticky-badge {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.6rem;
+    }
+    
+    .sticky-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.7rem;
+    }
+    
+    .sticky-btn svg {
+        width: 12px;
+        height: 12px;
+    }
+}
+
+@media (max-width: 600px) {
+    .sticky-card-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .sticky-buttons {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.sticky-footer-card {
+    animation: slideUp 0.4s ease-out;
+}
+
 /* ========== ANIMATIONS ========== */
 @keyframes fadeInUp {
     from {
@@ -897,22 +1014,8 @@ h1, h2, h3 {
     }
 }
 
-@-webkit-keyframes fadeInUp {
-    from {
-        opacity: 0;
-        -webkit-transform: translateY(30px);
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        -webkit-transform: translateY(0);
-        transform: translateY(0);
-    }
-}
-
 .hero-content, .trailer, .synopsis, .visionaries-grid, .timeline, .contact-wrapper, .premiere-card {
     animation: fadeInUp 0.8s ease-out;
-    -webkit-animation: fadeInUp 0.8s ease-out;
 }
 
 /* ========== КРОСС-БРАУЗЕРНЫЕ УЛУЧШЕНИЯ ========== */
@@ -935,7 +1038,6 @@ h1, h2, h3 {
 
 .touch-device .visionary-card:hover .visionary-img {
     filter: grayscale(0.4);
-    -webkit-filter: grayscale(0.4);
 }
 
 .touch-device .visionary-card:hover .hover-card-info {
@@ -954,7 +1056,6 @@ h1, h2, h3 {
     
     .hero-scroll-indicator {
         animation: none;
-        -webkit-animation: none;
     }
 }
 
