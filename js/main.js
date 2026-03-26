@@ -1,3 +1,80 @@
+// ========== ПОЛИФИЛЛЫ ДЛЯ СТАРЫХ БРАУЗЕРОВ ==========
+// Полифилл для smooth scroll (для Safari и старых браузеров)
+(function() {
+    // Проверяем поддержку smooth scroll
+    if ('scrollBehavior' in document.documentElement.style) {
+        return; // Smooth scroll поддерживается
+    }
+    
+    // Полифилл для smooth scroll
+    const smoothScrollTo = (element, duration = 500) => {
+        const targetPosition = element.getBoundingClientRect().top;
+        const startPosition = window.pageYOffset;
+        const distance = targetPosition - 80; // Учитываем хедер
+        let startTime = null;
+        
+        const animation = (currentTime) => {
+            if (startTime === null) startTime = currentTime;
+            const timeElapsed = currentTime - startTime;
+            const run = easeInOutCubic(timeElapsed, startPosition, distance, duration);
+            window.scrollTo(0, run);
+            if (timeElapsed < duration) requestAnimationFrame(animation);
+        };
+        
+        const easeInOutCubic = (t, b, c, d) => {
+            t /= d / 2;
+            if (t < 1) return c / 2 * t * t * t + b;
+            t -= 2;
+            return c / 2 * (t * t * t + 2) + b;
+        };
+        
+        requestAnimationFrame(animation);
+    };
+    
+    window.smoothScrollToPolyfill = smoothScrollTo;
+})();
+
+// Полифилл для Intersection Observer (для IE и старых браузеров)
+if (!window.IntersectionObserver) {
+    window.IntersectionObserver = class IntersectionObserver {
+        constructor(callback) {
+            this.callback = callback;
+            this.elements = [];
+            this.interval = null;
+        }
+        
+        observe(element) {
+            this.elements.push(element);
+            this.checkVisibility();
+            if (!this.interval) {
+                this.interval = setInterval(() => this.checkVisibility(), 100);
+            }
+        }
+        
+        unobserve(element) {
+            const index = this.elements.indexOf(element);
+            if (index > -1) {
+                this.elements.splice(index, 1);
+            }
+            if (this.elements.length === 0 && this.interval) {
+                clearInterval(this.interval);
+                this.interval = null;
+            }
+        }
+        
+        checkVisibility() {
+            this.elements.forEach(element => {
+                const rect = element.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                if (isVisible) {
+                    this.callback([{ target: element, isIntersecting: true }]);
+                    this.unobserve(element);
+                }
+            });
+        }
+    };
+}
+
 // ========== Модуль управления навигацией ==========
 const Navigation = (() => {
     const header = document.querySelector('.header');
@@ -7,7 +84,7 @@ const Navigation = (() => {
     
     // Функция для обновления активного состояния меню
     const updateActiveLink = () => {
-        const scrollPosition = window.scrollY + 100; // Смещение для учета хедера
+        const scrollPosition = window.pageYOffset + 100;
         
         navItems.forEach(link => {
             const sectionId = link.getAttribute('href');
@@ -28,14 +105,13 @@ const Navigation = (() => {
         });
     };
     
-    // Обработка скролла для изменения прозрачности хедера и активного пункта
+    // Обработка скролла
     const handleScroll = () => {
-        if (window.scrollY > 50) {
+        if (window.pageYOffset > 50) {
             header.classList.add('scrolled');
         } else {
             header.classList.remove('scrolled');
         }
-        
         updateActiveLink();
     };
     
@@ -71,12 +147,20 @@ const Navigation = (() => {
             const elementPosition = targetSection.getBoundingClientRect().top;
             const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
             
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
+            // Проверяем поддержку smooth scroll
+            if ('scrollBehavior' in document.documentElement.style) {
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            } else if (window.smoothScrollToPolyfill) {
+                // Используем полифилл
+                window.smoothScrollToPolyfill(targetSection, 500);
+            } else {
+                // Простая прокрутка
+                window.scrollTo(0, offsetPosition);
+            }
             
-            // Закрываем мобильное меню после клика
             closeMobileMenu();
         }
     };
@@ -93,15 +177,21 @@ const Navigation = (() => {
     const init = () => {
         if (header) {
             window.addEventListener('scroll', handleScroll);
+            // Для IE
+            window.addEventListener('scroll', handleScroll);
         }
         
         if (mobileBtn) {
             mobileBtn.addEventListener('click', toggleMobileMenu);
+            // Для мобильных устройств
+            mobileBtn.addEventListener('touchstart', toggleMobileMenu);
         }
         
         // Добавляем обработчики для каждой ссылки
         navItems.forEach(link => {
             link.addEventListener('click', handleNavClick);
+            // Для мобильных устройств
+            link.addEventListener('touchstart', handleNavClick);
         });
         
         // Закрытие меню при клике вне его
@@ -120,7 +210,6 @@ const Navigation = (() => {
             }
         });
         
-        // Вызываем обработчик скролла для начальной установки активного пункта
         handleScroll();
     };
     
@@ -178,6 +267,7 @@ const Visionaries = (() => {
     const gridContainer = document.getElementById('visionariesGrid');
     
     const escapeHtml = (str) => {
+        if (!str) return '';
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
@@ -217,6 +307,12 @@ const Visionaries = (() => {
         
         cards.forEach(card => {
             card.addEventListener('click', (e) => {
+                e.stopPropagation();
+                resetTouched();
+                card.classList.add('touched');
+            });
+            // Для мобильных устройств
+            card.addEventListener('touchstart', (e) => {
                 e.stopPropagation();
                 resetTouched();
                 card.classList.add('touched');
@@ -285,10 +381,14 @@ const LogoScroll = (() => {
         if (logo) {
             logo.addEventListener('click', (e) => {
                 e.preventDefault();
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+                if ('scrollBehavior' in document.documentElement.style) {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                } else {
+                    window.scrollTo(0, 0);
+                }
             });
         }
     };
@@ -296,12 +396,23 @@ const LogoScroll = (() => {
     return { init };
 })();
 
-// ========== Модуль предотвращения конфликтов (Touch) ==========
+// ========== Модуль для фиксации проблем с :hover на мобильных ==========
 const TouchHandler = (() => {
     const init = () => {
-        // Предотвращаем залипание hover на мобильных устройствах
         if ('ontouchstart' in window) {
             document.body.classList.add('touch-device');
+            
+            // Отключаем :hover эффекты на мобильных через CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                .touch-device .visionary-card:hover .visionary-img {
+                    filter: grayscale(0.4);
+                }
+                .touch-device .visionary-card:hover .hover-card-info {
+                    opacity: 0;
+                }
+            `;
+            document.head.appendChild(style);
         }
     };
     
@@ -319,9 +430,9 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('Лендинг успешно загружен');
 });
 
-// ========== Оптимизация производительности ==========
+// ========== Дополнительная оптимизация для старых браузеров ==========
 window.addEventListener('load', () => {
-    // Ленивая загрузка изображений уже встроена через loading="lazy"
+    // Ленивая загрузка изображений
     const images = document.querySelectorAll('img[data-src]');
     images.forEach(img => {
         if (img.dataset.src) {
@@ -329,4 +440,21 @@ window.addEventListener('load', () => {
             img.removeAttribute('data-src');
         }
     });
+    
+    // Фикс для iOS Safari
+    if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const target = document.querySelector(targetId);
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    }
 });
