@@ -393,23 +393,23 @@ var TouchHandler = (function() {
     return { init: init };
 })();
 
-// ========== Модуль фиксированного нижнего блока ==========
+// ========== Модуль фиксированного космического блока ==========
 var StickyFooter = (function() {
-    var stickyBar = document.querySelector('.sticky-footer-bar');
+    var cosmicBar = document.querySelector('.cosmic-footer');
     var ticking = false;
     var isVisible = false;
     
     var handleScroll = function() {
-        if (!stickyBar) return;
+        if (!cosmicBar) return;
         
         var currentScrollY = window.pageYOffset;
         var scrollThreshold = 300;
         
         if (currentScrollY > scrollThreshold && !isVisible) {
-            stickyBar.classList.remove('hide');
+            cosmicBar.classList.remove('hide');
             isVisible = true;
         } else if (currentScrollY <= scrollThreshold && isVisible) {
-            stickyBar.classList.add('hide');
+            cosmicBar.classList.add('hide');
             isVisible = false;
         }
         
@@ -417,9 +417,9 @@ var StickyFooter = (function() {
     };
     
     var init = function() {
-        if (!stickyBar) return;
+        if (!cosmicBar) return;
         
-        stickyBar.classList.add('hide');
+        cosmicBar.classList.add('hide');
         isVisible = false;
         
         window.addEventListener('scroll', function() {
@@ -427,6 +427,25 @@ var StickyFooter = (function() {
                 requestAnimationFrame(handleScroll);
                 ticking = true;
             }
+        });
+    };
+    
+    return { init: init };
+})();
+
+// ========== Дополнительная анимация для планеты ==========
+var PlanetAnimation = (function() {
+    var init = function() {
+        var planet = document.querySelector('.cosmic-planet');
+        if (!planet) return;
+        
+        planet.addEventListener('mouseenter', function() {
+            this.style.transform = 'scale(1.05)';
+            this.style.transition = 'transform 0.3s ease';
+        });
+        
+        planet.addEventListener('mouseleave', function() {
+            this.style.transform = 'scale(1)';
         });
     };
     
@@ -441,6 +460,7 @@ document.addEventListener('DOMContentLoaded', function() {
     LogoScroll.init();
     TouchHandler.init();
     StickyFooter.init();
+    PlanetAnimation.init();
     
     console.log('Лендинг успешно загружен');
 });
